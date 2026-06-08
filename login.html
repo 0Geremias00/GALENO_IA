@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galeno IA — Acceso</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#070b14;--bg2:#0d1525;--surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.08);
+    --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+    --text:#e8edf5;--text2:#7a8ba8;--text3:#4a5a72;
+    --accent:#3d8ef8;--accent2:#6ee7f7;--accent3:#a78bfa;
+    --success:#22c55e;--error:#ef4444;
+    --wave1:rgba(61,142,248,0.12);--wave2:rgba(110,231,247,0.08);--wave3:rgba(167,139,250,0.06);
+    --t:0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;}
+  .wave-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+  .orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;}
+  .orb1{width:500px;height:500px;background:var(--wave1);top:-150px;left:-150px;animation:orbF 15s ease-in-out infinite alternate;}
+  .orb2{width:400px;height:400px;background:var(--wave2);bottom:-100px;right:-100px;animation:orbF 20s ease-in-out infinite alternate-reverse;}
+  .orb3{width:300px;height:300px;background:var(--wave3);top:50%;left:50%;animation:orbF 12s ease-in-out infinite alternate;}
+  @keyframes orbF{0%{transform:translate(0,0)}100%{transform:translate(40px,-40px)}}
+
+  nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);}
+  .nav-logo{display:flex;align-items:center;gap:12px;}
+  .nav-logo-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent3));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:white;box-shadow:0 4px 20px rgba(61,142,248,0.3);}
+  .nav-logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .nav-logo-sub{font-size:11px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;}
+  .nav-pill{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--border);font-size:12px;color:var(--text2);}
+  .nav-dot{width:7px;height:7px;border-radius:50%;background:var(--success);animation:blink 2s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+  .hero{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 81px);padding:40px 20px;}
+  .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1100px;width:100%;align-items:center;}
+
+  .hero-left{display:flex;flex-direction:column;gap:24px;}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;background:rgba(61,142,248,0.1);border:1px solid rgba(61,142,248,0.2);font-size:12px;color:var(--accent);width:fit-content;}
+  .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:blink 2s ease-in-out infinite;}
+  .hero-title{font-family:'Syne',sans-serif;font-weight:800;font-size:52px;line-height:1.1;}
+  .hero-title span{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-desc{font-size:17px;color:var(--text2);line-height:1.7;max-width:460px;}
+  .hero-features{display:flex;flex-direction:column;gap:12px;}
+  .hero-feature{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text2);}
+  .hero-feature-icon{width:28px;height:28px;border-radius:8px;background:rgba(61,142,248,0.1);border:1px solid rgba(61,142,248,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .hero-stats{display:flex;gap:32px;margin-top:8px;}
+  .hero-stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .hero-stat-label{font-size:12px;color:var(--text3);}
+
+  .auth-card{background:rgba(13,21,37,0.8);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:24px;}
+  .auth-tabs{display:flex;background:var(--surface);border-radius:12px;padding:4px;gap:4px;}
+  .auth-tab{flex:1;padding:10px;border-radius:9px;border:none;background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all var(--t);}
+  .auth-tab.active{background:rgba(61,142,248,0.15);color:var(--accent);border:1px solid rgba(61,142,248,0.2);}
+
+  .auth-form{display:flex;flex-direction:column;gap:16px;}
+  .auth-form.hidden{display:none;}
+  .form-group{display:flex;flex-direction:column;gap:6px;}
+  .form-label{font-size:13px;color:var(--text2);font-weight:500;}
+  .form-input{padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:all var(--t);}
+  .form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(61,142,248,0.1);}
+  .form-input::placeholder{color:var(--text3);}
+  .btn-auth{padding:14px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent3));border:none;color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all var(--t);letter-spacing:0.02em;}
+  .btn-auth:hover{opacity:0.9;transform:translateY(-1px);}
+  .btn-auth:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+  .form-footer{text-align:center;font-size:13px;color:var(--text3);}
+  .form-link{color:var(--accent);cursor:pointer;text-decoration:none;}
+  .form-link:hover{text-decoration:underline;}
+  .alert{padding:12px 16px;border-radius:10px;font-size:13px;display:none;}
+  .alert.error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#fca5a5;display:flex;}
+  .alert.success{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);color:#86efac;display:flex;}
+  .password-wrapper{position:relative;}
+  .password-wrapper .form-input{padding-right:44px;width:100%;}
+  .btn-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:4px;}
+
+  @media(max-width:768px){
+    .hero-inner{grid-template-columns:1fr;gap:40px;}
+    .hero-title{font-size:36px;}
+    .hero-stats{gap:20px;}
+    nav{padding:16px 20px;}
+    .hero{padding:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="wave-bg">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">G</div>
+    <div>
+      <div class="nav-logo-text">Galeno IA</div>
+      <div class="nav-logo-sub">Asistente Médico</div>
+    </div>
+  </div>
+  <div class="nav-pill">
+    <div class="nav-dot"></div>
+    <span>Sistema activo</span>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        Inteligencia Artificial Médica
+      </div>
+      <div class="hero-title">
+        Tu asistente<br><span>médico</span><br>inteligente
+      </div>
+      <div class="hero-desc">
+        Accede a información médica precisa en español e inglés, con historial privado y soporte de documentos clínicos.
+      </div>
+      <div class="hero-features">
+        <div class="hero-feature">
+          <div class="hero-feature-icon">🩺</div>
+          <span>Respuestas médicas en español e inglés</span>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-icon">🔒</div>
+          <span>Historial privado por usuario</span>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-icon">📄</div>
+          <span>Carga de documentos y guías clínicas</span>
+        </div>
+        <div class="hero-feature">
+          <div class="hero-feature-icon">⚡</div>
+          <span>IA local, sin internet requerido</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">100%</div>
+          <div class="hero-stat-label">Privado y local</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">24/7</div>
+          <div class="hero-stat-label">Disponible</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">ES/EN</div>
+          <div class="hero-stat-label">Bilingüe</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div style="text-align:center;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;margin-bottom:6px;">Bienvenido</div>
+        <div style="font-size:14px;color:var(--text2);">Accede a tu cuenta para continuar</div>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Iniciar sesión</button>
+        <button class="auth-tab" onclick="switchTab('register')">Registrarse</button>
+      </div>
+
+      <div id="alertBox" class="alert"></div>
+
+      <!-- LOGIN -->
+      <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label">Correo electrónico</label>
+          <input type="email" class="form-input" id="loginEmail" placeholder="tu@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" class="form-input" id="loginPassword" placeholder="••••••••" required>
+            <button type="button" class="btn-eye" onclick="togglePassword('loginPassword', this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth" id="loginBtn">Iniciar sesión</button>
+        <div class="form-footer">
+          ¿No tienes cuenta? <a class="form-link" onclick="switchTab('register')">Regístrate gratis</a>
+        </div>
+      </form>
+
+      <!-- REGISTER -->
+      <form class="auth-form hidden" id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label">Nombre completo</label>
+          <input type="text" class="form-input" id="regNombre" placeholder="Tu nombre" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Correo electrónico</label>
+          <input type="email" class="form-input" id="regEmail" placeholder="tu@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" class="form-input" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+            <button type="button" class="btn-eye" onclick="togglePassword('regPassword', this)">👁</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirmar contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" class="form-input" id="regPassword2" placeholder="Repite tu contraseña" required>
+            <button type="button" class="btn-eye" onclick="togglePassword('regPassword2', this)">👁</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth" id="registerBtn">Crear cuenta</button>
+        <div class="form-footer">
+          ¿Ya tienes cuenta? <a class="form-link" onclick="switchTab('login')">Inicia sesión</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
+  document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
+  hideAlert();
+}
+
+function showAlert(msg, type) {
+  const box = document.getElementById('alertBox');
+  box.textContent = msg;
+  box.className = 'alert ' + type;
+}
+
+function hideAlert() {
+  document.getElementById('alertBox').className = 'alert';
+}
+
+function togglePassword(id, btn) {
+  const input = document.getElementById(id);
+  input.type = input.type === 'password' ? 'text' : 'password';
+  btn.textContent = input.type === 'password' ? '👁' : '🙈';
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  btn.disabled = true;
+  btn.textContent = 'Iniciando sesión...';
+  hideAlert();
+  try {
+    const res = await fetch('/auth/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password})
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error al iniciar sesión');
+    localStorage.setItem('galeno_token', data.token);
+    localStorage.setItem('galeno_user', JSON.stringify({nombre: data.nombre, email: data.email, rol: data.rol}));
+    showAlert('Bienvenido ' + data.nombre + '! Redirigiendo...', 'success');
+    setTimeout(() => { window.location.href = '/'; }, 1500);
+  } catch(err) {
+    showAlert(err.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Iniciar sesión';
+  }
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('registerBtn');
+  const nombre = document.getElementById('regNombre').value;
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  const password2 = document.getElementById('regPassword2').value;
+  if (password !== password2) { showAlert('Las contraseñas no coinciden', 'error'); return; }
+  btn.disabled = true;
+  btn.textContent = 'Creando cuenta...';
+  hideAlert();
+  try {
+    const res = await fetch('/auth/registro', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({nombre, email, password})
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error al registrarse');
+    localStorage.setItem('galeno_token', data.token);
+    localStorage.setItem('galeno_user', JSON.stringify({nombre: data.nombre, email: data.email}));
+    showAlert('Cuenta creada exitosamente! Redirigiendo...', 'success');
+    setTimeout(() => { window.location.href = '/'; }, 1500);
+  } catch(err) {
+    showAlert(err.message, 'error');
+    btn.disabled = false;
+    btn.textContent = 'Crear cuenta';
+  }
+}
+
+// Si ya tiene token válido, redirigir al chat
+if (localStorage.getItem('galeno_token')) {
+  window.location.href = '/';
+}
+</script>
+</body>
+</html>
