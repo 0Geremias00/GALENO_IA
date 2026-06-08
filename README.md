@@ -496,3 +496,9 @@ Hecho con ❤️ para la comunidad médica hispanohablante
 **[⬆ Volver arriba](#-galeno-ia--asistente-médico-inteligente)**
 
 </div>
+👤 Oscar Ger
+👤 Antonio Guerrero
+👤 Andrés Villacis
+👤 Jhon Erazo
+
+Proyecto desarrollado en la UPEC — Inteligencia Artificial — Octavo Semestre
